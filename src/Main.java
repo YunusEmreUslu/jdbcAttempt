@@ -6,6 +6,8 @@ public class Main {
         // to see how IntelliJ IDEA suggests fixing it.
         DbFunctions db=new DbFunctions();
         Connection conn=db.connect_to_db("tutdb","postgres","usluneinnein99");
-        db.createTable(conn, "employee");
+       // db.createTable(conn, "employee");
+        db.insert_row(conn, "employee", "Swag", "Turkmenistan");
+
     }
 }
