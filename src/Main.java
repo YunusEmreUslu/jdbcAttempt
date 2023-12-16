@@ -8,8 +8,13 @@ public class Main {
         Connection conn=db.connect_to_db("tutdb","postgres","usluneinnein99");
        // db.createTable(conn, "employee");
        // db.insert_row(conn, "employee", "Yolo", "Turkistan");
-        db.update_name(conn,"employee","Swag", "Suleyman");
-        db.read_data(conn,"employee");
-
+       // db.update_name(conn,"employee","Swag", "Suleyman");
+       // db.read_data(conn,"employee");
+       // db.search_by_name(conn, "employee", "Suleyman");
+       // db.search_by_id(conn, "employee", 2);
+       // db.delete_row_by_name(conn, "employee", "Yolo");
+       // db.delete_row_by_id(conn, "employee", 3 );
+       // db.read_data(conn, "employee");
+       // db.delete_table(conn, "employee");
     }
 }

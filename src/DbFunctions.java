@@ -73,4 +73,74 @@ public class DbFunctions {
             System.out.println(e);
         }
     }
+
+    public void search_by_name(Connection conn, String table_name, String name){
+        Statement statement;
+        ResultSet rs=null;
+        try{
+            String query=String.format("select * from %s where name= '%s'", table_name, name);
+            statement=conn.createStatement();
+            rs = statement.executeQuery(query);
+            while(rs.next()){
+                System.out.print(rs.getString("empid")+" ");
+                System.out.print(rs.getString("name")+" ");
+                System.out.println(rs.getString("Address")+" ");
+            }
+        } catch (Exception e){
+            System.out.println(e);
+        }
+    }
+
+    public void search_by_id(Connection conn, String table_name, int id){
+        Statement statement;
+        ResultSet rs=null;
+        try{
+            String query=String.format("select * from %s where empid= %s", table_name, id);
+            statement=conn.createStatement();
+            rs = statement.executeQuery(query);
+            while(rs.next()){
+                System.out.print(rs.getString("empid")+" ");
+                System.out.print(rs.getString("name")+" ");
+                System.out.println(rs.getString("Address")+" ");
+            }
+        } catch (Exception e){
+            System.out.println(e);
+        }
+    }
+
+    public void delete_row_by_name(Connection conn,String table_name,String name){
+        Statement statement;
+        try{
+            String query=String.format("delete from %s where name ='%s'",table_name,name);
+            statement=conn.createStatement();
+            statement.executeUpdate(query);
+            System.out.println("Data Updated");
+        }catch (Exception e){
+            System.out.println(e);
+        }
+    }
+
+    public void delete_row_by_id(Connection conn,String table_name,int id){
+        Statement statement;
+        try{
+            String query=String.format("delete from %s where name ='%s'",table_name,id);
+            statement=conn.createStatement();
+            statement.executeUpdate(query);
+            System.out.println("Data Updated");
+        }catch (Exception e){
+            System.out.println(e);
+        }
+    }
+
+    public void delete_table(Connection conn,String table_name){
+        Statement statement;
+        try{
+            String query=String.format("drop table %s",table_name);
+            statement=conn.createStatement();
+            statement.executeUpdate(query);
+            System.out.println("Table Deleted");
+        }catch (Exception e){
+            System.out.println(e);
+        }
+    }
 }
