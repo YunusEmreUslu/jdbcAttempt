@@ -1,7 +1,6 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DbFunctions {
     public Connection connect_to_db(String dbname, String user, String pass){
@@ -21,6 +20,22 @@ public class DbFunctions {
         }
         return conn;
     }
+
+    public List<String> getListOfTables(Connection conn) {
+        List<String> tables = new ArrayList<>();
+        try {
+            DatabaseMetaData metaData = conn.getMetaData();
+            try (ResultSet resultSet = metaData.getTables(null, null, "%", new String[]{"TABLE"})) {
+                while (resultSet.next()) {
+                    tables.add(resultSet.getString("TABLE_NAME"));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error getting list of tables: " + e.getMessage());
+        }
+        return tables;
+    }
+
     public void createTable(Connection conn, String table_name){
         Statement statement;
         try{
@@ -132,14 +147,27 @@ public class DbFunctions {
         }
     }
 
-    public void delete_table(Connection conn,String table_name){
-        Statement statement;
-        try{
-            String query=String.format("drop table %s",table_name);
-            statement=conn.createStatement();
-            statement.executeUpdate(query);
-            System.out.println("Table Deleted");
-        }catch (Exception e){
+    public void delete_table(Connection conn, String tableName) {
+        try {
+            // Check if the table exists before attempting to delete
+            String queryExists = String.format("SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = '%s')", tableName);
+
+            try (Statement existsStatement = conn.createStatement(); ResultSet resultSet = existsStatement.executeQuery(queryExists)) {
+                if (!resultSet.next() || !resultSet.getBoolean(1)) {
+                    System.out.println("Table '" + tableName + "' does not exist.");
+                    return; // Skip deletion if the table doesn't exist
+                }
+            }
+
+            // Proceed with table deletion
+            String queryDelete = String.format("DROP TABLE %s", tableName);
+
+            try (Statement deleteStatement = conn.createStatement()) {
+                deleteStatement.executeUpdate(queryDelete);
+                System.out.println("Table Deleted");
+            }
+
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
